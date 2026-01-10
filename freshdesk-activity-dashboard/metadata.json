@@ -1,0 +1,5 @@
+{
+  "name": "Freshdesk Activity Dashboard",
+  "description": "A web application to connect to a Freshdesk domain, allowing users to select an agent and a date range to view and summarise ticket activity. It utilizes the Gemini API to generate concise summaries of each ticket's context and resolution.",
+  "requestFramePermissions": []
+}
