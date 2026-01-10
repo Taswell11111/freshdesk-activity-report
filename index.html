@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freshdesk Activity Dashboard_Jan2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontSize: {
+              'xxs': ['0.75rem', { lineHeight: '1rem' }],      // ~12px (was 9.6px)
+              'xs': ['0.875rem', { lineHeight: '1.25rem' }], // ~14px (was 12px)
+              'sm': ['1rem', { lineHeight: '1.5rem' }],     // ~16px (was 14px)
+              'base': ['1.125rem', { lineHeight: '1.75rem' }], // ~18px (was 16px)
+              'lg': ['1.25rem', { lineHeight: '1.75rem' }],   // ~20px (was 18px)
+              'xl': ['1.5rem', { lineHeight: '2rem' }],      // ~24px (was 20px)
+              '2xl': ['1.875rem', { lineHeight: '2.25rem' }], // ~30px (was 24px)
+              '3xl': ['2.25rem', { lineHeight: '2.5rem' }],   // ~36px (was 30px)
+              '4xl': ['3rem', { lineHeight: '1' }],           // ~48px (was 36px)
+              '5xl': ['3.75rem', { lineHeight: '1' }],       // ~60px (was 48px)
+              '6xl': ['4.5rem', { lineHeight: '1' }],         // new
+            },
+            colors: {
+              'fd-blue': '#0099ff',
+              'fd-gray': '#f0f3f5',
+              'ecomplete-primary': '#0f172a',
+              'ecomplete-accent': '#0099ff',
+              'ecomplete-light': '#f8fafc',
+              'ecomplete-text': '#1e293b'
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.6s ease-out',
+              'slide-up': 'slideUp 0.6s ease-out',
+              'scale-in': 'scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+              'blob': 'blob 7s infinite',
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { transform: 'translateY(30px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+              scaleIn: { '0%': { transform: 'scale(0.95)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+              shake: {
+                '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                '40%, 60%': { transform: 'translate3d(4px, 0, 0)' },
+              },
+              blob: {
+                '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                '100%': { transform: 'translate(0px, 0px) scale(1)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/": "https://esm.sh/react@18.2.0/",
+    "react-dom/": "https://esm.sh/react-dom@18.2.0/",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react",
+    "date-fns": "https://esm.sh/date-fns@3.3.1",
+    "chart.js/auto": "https://esm.sh/chart.js@4.4.1/auto",
+    "chart.js": "https://esm.sh/chart.js@4.4.1",
+    "chartjs-plugin-datalabels": "https://esm.sh/chartjs-plugin-datalabels@2.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.2",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "express": "https://esm.sh/express@^5.2.1",
+    "cors": "https://esm.sh/cors@^2.8.5",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4",
+    "dotenv": "https://esm.sh/dotenv@^17.2.3",
+    "chart.js/": "https://esm.sh/chart.js@^4.5.1/",
+    "@google-cloud/storage": "https://esm.sh/@google-cloud/storage@^7.18.0"
+  }
+}
+</script>
+  </head>
+  <body class="bg-gray-950">
+    <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
+  </body>
+</html>
