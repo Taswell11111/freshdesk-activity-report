@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { Storage } from '@google-cloud/storage';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 dotenv.config();
 
@@ -18,10 +19,16 @@ const __dirname = path.dirname(__filename);
 const FRESHDESK_DOMAIN = (process.env.FRESHDESK_DOMAIN || 'ecomplete.freshdesk.com')
     .replace(/^https?:\/\//, '').replace(/\/$/, '');
 const SERVER_API_KEY = process.env.FRESHDESK_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // Configure GCS
 const storage = new Storage({ keyFilename: path.join(__dirname, 'freshdesk_service_account.json') });
 const BUCKET_NAME = 'freshdesk_executive_report';
+
+// Configure Gemini
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const geminiModel = genAI.getGenerativeModel({ model: "gemini-pro" });
+
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '50mb' }));
@@ -34,6 +41,27 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+// --- 0. Gemini Endpoint ---
+app.post('/api/summarize', async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        if (!prompt) {
+            return res.status(400).json({ error: "Missing prompt" });
+        }
+
+        const result = await geminiModel.generateContent(prompt);
+        const response = await result.response;
+        const text = await response.text();
+
+        res.json({ success: true, summary: text });
+
+    } catch (error) {
+        console.error("[Gemini] Error:", error);
+        res.status(500).json({ error: "Failed to generate summary", details: error.message });
+    }
+});
+
 
 // --- 1. Report Upload Endpoint ---
 // Defined *before* the generic /api proxy to ensure it's not proxied
