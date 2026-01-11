@@ -22,7 +22,7 @@ const SERVER_API_KEY = process.env.FRESHDESK_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // Configure GCS
-const storage = new Storage({ keyFilename: path.join(__dirname, 'freshdesk_service_account.json') });
+const storage = new Storage(); // Automatically uses Application Default Credentials
 const BUCKET_NAME = 'freshdesk_executive_report';
 
 // Configure Gemini

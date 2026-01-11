@@ -23,16 +23,24 @@ RUN npm run build
 # Use a lightweight Node.js image for the final container
 FROM node:18-alpine
 
-WORKDIR /app
+ENV NODE_ENV=production
+
+# Create a non-root user and group
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+WORKDIR /home/appuser/app
 
 # Copy only the necessary package files for production
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm install --production
+RUN npm ci --only=production
 
 # Copy the server file
 COPY server.js .
+
+# Change ownership of the app files to the non-root user
+RUN chown -R appuser:appgroup .
 
 # Copy the built React app from the 'builder' stage
 # This assumes your build output is in a 'dist' folder. 
@@ -41,6 +49,9 @@ COPY --from=builder /app/dist ./dist
 
 # Expose the port the server will run on. Cloud Run provides this via the PORT env var.
 EXPOSE 8080
+
+# Switch to the non-root user
+USER appuser
 
 # The command to start the server
 CMD [ "node", "server.js" ]

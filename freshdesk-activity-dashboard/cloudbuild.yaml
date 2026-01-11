@@ -1,5 +1,41 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$freshdesk-activity-report/freshdesk-activity-dashboard-jan2026:$COMMIT_SHA', '.']
+  # 1. Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '.'
+
+  # 2. Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:$COMMIT_SHA'
+
+  # 3. Deploy the new version to Cloud Run
+  - name: 'gcr.io/google-appengine/exec-wrapper'
+    args:
+      - '-i'
+      - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '-s'
+      - '${_SERVICE_NAME}'
+      - '-r'
+      - '${_LOCATION}'
+      - '--allow-unauthenticated' # Allows public access to your dashboard
+      - '--port'
+      - '8080' # The port your app listens on (from Dockerfile)
+      # Pass API keys securely as environment variables
+      - '--set-env-vars=FRESHDESK_API_KEY=${_FRESHDESK_API_KEY},GEMINI_API_KEY=${_GEMINI_API_KEY},FRESHDESK_DOMAIN=${_FRESHDESK_DOMAIN}'
+
+images:
+  - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:$COMMIT_SHA'
+
+substitutions:
+  _SERVICE_NAME: 'freshdesk-dashboard'
+  _REPO_NAME: 'freshdesk-app-repo' # IMPORTANT: Change to your Artifact Registry repo name
+  _LOCATION: 'us-central1' # IMPORTANT: Change to your desired region
+  _FRESHDESK_DOMAIN: 'ecomplete.freshdesk.com' # Your Freshdesk domain
+
 options:
   logging: CLOUD_LOGGING_ONLY
